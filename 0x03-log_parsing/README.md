@@ -9,5 +9,5 @@
 &nbsp;&nbsp;&nbsp;&nbsp;<li>Number of lines by status code:</li>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>possible status code: 200, 301, 400, 401, 403, 404, 405 and 500</li>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>if a status code doesn’t appear or is not an integer, don’t print anything for this status code</li>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>format: <status code>: <number></li>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<li>status codes should be printed in ascending order</li>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . format: <status code>: <number>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; . status codes should be printed in ascending order
