@@ -30,7 +30,7 @@ try:
                 line_count += 1
 
             # Print statistics after every 10 lines
-            if line_count % 10 == 0:
+            if line_count > 0 and line_count % 10 == 0:
                 print(f"File size: {total_file_size}")
                 for code in sorted(status_code_count):
                     print(f"{code}: {status_code_count[code]}")
