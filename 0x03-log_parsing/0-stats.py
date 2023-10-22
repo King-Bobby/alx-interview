@@ -40,4 +40,3 @@ except KeyboardInterrupt:
     print(f"File size: {total_file_size}")
     for code in sorted(status_code_count):
         print(f"{code}: {status_code_count[code]}")
-    raise
