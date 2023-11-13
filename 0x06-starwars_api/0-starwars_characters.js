@@ -9,24 +9,44 @@ if (!movieId) {
   process.exit(1);
 }
 
-const url = `https://swapi.dev/api/films/${movieId}/`;
+const getCharacter = async (characterUrl) => {
+  return new Promise((resolve, reject) => {
+    request(characterUrl, (error, response, body) => {
+      if (error) {
+        reject(error);
+      } else {
+        const character = JSON.parse(body);
+        resolve(character.name);
+      }
+    });
+  });
+};
 
-request(url, (error, response, body) => {
-  if (error) {
-    console.error(error);
-  } else {
-    const film = JSON.parse(body);
-    const characters = film.characters;
+const getCharacters = async () => {
+  const url = `https://swapi.dev/api/films/${movieId}/`;
 
-    characters.forEach((characterUrl) => {
-      request(characterUrl, (charError, charResponse, charBody) => {
-        if (charError) {
-          console.error(charError);
+  try {
+    const filmResponse = await new Promise((resolve, reject) => {
+      request(url, (error, response, body) => {
+        if (error) {
+          reject(error);
         } else {
-          const character = JSON.parse(charBody);
-          console.log(character.name);
+          resolve(body);
         }
       });
     });
+
+    const film = JSON.parse(filmResponse);
+    const characters = film.characters;
+
+    for (const characterUrl of characters) {
+      const characterName = await getCharacter(characterUrl);
+      console.log(characterName);
+    }
+  } catch (error) {
+    console.error(error);
   }
-});
+};
+
+getCharacters();
+
