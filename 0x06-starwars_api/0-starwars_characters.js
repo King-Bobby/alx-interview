@@ -49,4 +49,3 @@ const getCharacters = async () => {
 };
 
 getCharacters();
-
