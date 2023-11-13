@@ -1,35 +1,32 @@
 #!/usr/bin/node
 
-import requests
-import sys
+const request = require('request');
 
+const movieId = process.argv[2];
 
-def get_movie_characters(movie_id):
-    api_url = f"https://swapi-api.alx-tools.com/api/films/{movie_id}"
+if (!movieId) {
+  console.error('Usage: ./0-starwars_characters.js <movie_id>');
+  process.exit(1);
+}
 
-    try:
-        response = requests.get(api_url)
-        response.raise_for_status()
-        movie_data = response.json()
+const url = `https://swapi.dev/api/films/${movieId}/`;
 
-        characters = movie_data.get("characters", [])
+request(url, (error, response, body) => {
+  if (error) {
+    console.error(error);
+  } else {
+    const film = JSON.parse(body);
+    const characters = film.characters;
 
-        for character_url in characters:
-            character_response = requests.get(character_url)
-            character_response.raise_for_status()
-            character_data = character_response.json()
-
-            print(character_data["name"])
-
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
-
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script.py <movie_id>")
-        sys.exit(1)
-
-    movie_id = sys.argv[1]
-    get_movie_characters(movie_id)
+    characters.forEach((characterUrl) => {
+      request(characterUrl, (charError, charResponse, charBody) => {
+        if (charError) {
+          console.error(charError);
+        } else {
+          const character = JSON.parse(charBody);
+          console.log(character.name);
+        }
+      });
+    });
+  }
+});
