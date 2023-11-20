@@ -26,7 +26,7 @@ def parse_line(line, total_size, status_codes):
                     status_codes[status_code] += 1
 
         return total_size, status_codes
-    except ValueError:
+    except (ValueError, IndexError):
         return total_size, status_codes
 
 
