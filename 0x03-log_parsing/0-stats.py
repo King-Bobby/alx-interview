@@ -1,42 +1,52 @@
 #!/usr/bin/python3
-"""
-script that reads stdin line by line and computes metrics:
-"""
-
-
 import sys
-from collections import defaultdict
 
 
-# Initialize variables to keep track of metrics
-total_file_size = 0
-status_code_count = defaultdict(int)
+def print_stats(total_size, status_codes):
+    print("File size: {}".format(total_size))
+    for code in sorted(status_codes):
+        print("{}: {}".format(code, status_codes[code]))
 
-try:
+
+def parse_line(line, total_size, status_codes):
+    try:
+        elements = line.split()
+        if len(elements) >= 9:
+            status_code = int(elements[-2])
+            file_size = int(elements[-1])
+            total_size += file_size
+
+            if status_code in [200, 301, 400, 401, 403, 404, 405, 500]:
+                if status_code not in status_codes:
+                    status_codes[status_code] = 1
+                else:
+                    status_codes[status_code] += 1
+
+        return total_size, status_codes
+    except ValueError:
+        return total_size, status_codes
+
+
+def main():
     line_count = 0
-    for line in sys.stdin:
-        # Parse the log line and split it into components
-        parts = line.split()
-        if len(parts) >= 9:
-            status_code = parts[-2]
-            file_size = int(parts[-1])
+    total_size = 0
+    status_codes = {}
 
-            # Check if the status code is valid
-            if status_code in ["200", "301", "400",
-                               "401", "403", "404", "405", "500"]:
-                # Update the metrics
-                total_file_size += file_size
-                status_code_count[status_code] += 1
-                line_count += 1
+    try:
+        for line in sys.stdin:
+            line_count += 1
+            total_size, status_codes = parse_line(line,
+                                                  total_size, status_codes)
 
-            # Print statistics after every 10 lines
-            if line_count > 0 and line_count % 10 == 0:
-                print(f"File size: {total_file_size}")
-                for code in sorted(status_code_count):
-                    print(f"{code}: {status_code_count[code]}")
+            if line_count == 10:
+                print_stats(total_size, status_codes)
+                line_count = 0
 
-except KeyboardInterrupt:
-    # Handle Ctrl+C gracefully by printing the statistics one last time
-    print(f"File size: {total_file_size}")
-    for code in sorted(status_code_count):
-        print(f"{code}: {status_code_count[code]}")
+    except KeyboardInterrupt:
+        pass
+
+    print_stats(total_size, status_codes)
+
+
+if __name__ == "__main__":
+    main()
