@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+""""
+Module 0-stats.py that prints out status codes
+"""
 import sys
 
 
