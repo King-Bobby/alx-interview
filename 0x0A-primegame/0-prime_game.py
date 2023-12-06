@@ -3,8 +3,11 @@
 Two frienda play a prime number game and retuen the winner
 """
 
+
 def isWinner(x, nums):
+    """A prime number game between two friends"""
     def is_prime(num):
+        """finds which number is a prime number"""
         if num < 2:
             return False
         for i in range(2, int(num**0.5) + 1):
@@ -13,9 +16,11 @@ def isWinner(x, nums):
         return True
 
     def get_primes_up_to_n(n):
+        """gets the sequence of numbers up to n"""
         return {i for i in range(2, n + 1) if is_prime(i)}
 
     def play_round(n):
+        """THe friends see who wins a round"""
         primes = get_primes_up_to_n(n)
         maria_turn = True
 
